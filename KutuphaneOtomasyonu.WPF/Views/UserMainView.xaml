@@ -1,0 +1,155 @@
+﻿<Window x:Class="KutuphaneOtomasyonu.WPF.Views.UserMainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewmodels="clr-namespace:KutuphaneOtomasyonu.WPF.ViewModels"
+        xmlns:views="clr-namespace:KutuphaneOtomasyonu.WPF.Views"
+        xmlns:converters="clr-namespace:KutuphaneOtomasyonu.WPF.Converters"
+        mc:Ignorable="d"
+        Title="📖 Kütüphane - Kullanıcı Paneli"
+        Height="600" Width="1000"
+        WindowStartupLocation="CenterScreen"
+        Background="#F5F7FA"
+        FontFamily="Segoe UI">
+
+    <Window.Resources>
+        <!-- Renkler -->
+        <SolidColorBrush x:Key="PrimaryColor" Color="#007BFF"/>
+        <SolidColorBrush x:Key="SidebarColor" Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="BorderColor" Color="#E0E0E0"/>
+        <SolidColorBrush x:Key="TextColor" Color="#343A40"/>
+        <SolidColorBrush x:Key="HoverColor" Color="#E9F2FF"/>
+        
+        
+        <DropShadowEffect x:Key="TopBarShadowEffect"
+                  Color="Black"
+                  BlurRadius="5"
+                  ShadowDepth="2"
+                  Opacity="0.2"/>
+
+
+        <!-- Dönüştürücü -->
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+
+        <!-- Sidebar Button Style -->
+        <Style x:Key="SidebarButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource TextColor}"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="8" Padding="6">
+                            <ContentPresenter VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource HoverColor}"/>
+                    <Setter Property="Foreground" Value="{StaticResource PrimaryColor}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <DockPanel>
+
+        <!-- ÜST PANEL -->
+        <Border DockPanel.Dock="Top"
+                Background="White"
+                Padding="12"
+                BorderBrush="{StaticResource BorderColor}"
+                BorderThickness="0,0,0,1"
+                Effect="{StaticResource TopBarShadowEffect}">
+            <TextBlock Text="📖 Kütüphane Paneli"
+                       FontSize="20"
+                       FontWeight="Bold"
+                       Foreground="{StaticResource TextColor}"
+                       VerticalAlignment="Center"/>
+        </Border>
+
+        <!-- SOL MENÜ -->
+        <Border DockPanel.Dock="Left"
+                Background="{StaticResource SidebarColor}"
+                Width="220"
+                BorderBrush="{StaticResource BorderColor}"
+                BorderThickness="0,0,1,0">
+            <StackPanel Margin="15" VerticalAlignment="Stretch">
+                <TextBlock Text="📚 Kullanıcı Paneli"
+                           FontSize="18"
+                           FontWeight="Bold"
+                           Foreground="{StaticResource TextColor}"
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,20"/>
+
+                <Button Style="{StaticResource SidebarButton}" Command="{Binding ShowBooksCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="📘" Margin="0,0,10,0"/>
+                        <TextBlock Text="Kitaplar"/>
+                    </StackPanel>
+                </Button>
+
+                <Button Style="{StaticResource SidebarButton}" Command="{Binding ShowCategoriesCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="📂" Margin="0,0,10,0"/>
+                        <TextBlock Text="Kategoriler"/>
+                    </StackPanel>
+                </Button>
+
+                <Button Style="{StaticResource SidebarButton}" Command="{Binding ShowAuthorsCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="✍️" Margin="0,0,10,0"/>
+                        <TextBlock Text="Yazarlar"/>
+                    </StackPanel>
+                </Button>
+
+                <Button Style="{StaticResource SidebarButton}" Command="{Binding NavigateToMyCommentsCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="💬" Margin="0,0,10,0"/>
+                        <TextBlock Text="Yorumlarım"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Border>
+
+        <!-- İÇERİK ALANI -->
+        <ContentControl Content="{Binding CurrentContentViewModel}" Margin="20">
+            <ContentControl.Resources>
+                <DataTemplate DataType="{x:Type viewmodels:PlaceholderViewModel}">
+                    <TextBlock Text="{Binding Message}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontSize="18"
+                               Foreground="Gray"/>
+                </DataTemplate>
+
+                <DataTemplate DataType="{x:Type viewmodels:BookListViewModel}">
+                    <views:BookListView/>
+                </DataTemplate>
+
+                <DataTemplate DataType="{x:Type viewmodels:BookDetailViewModel}">
+                    <views:BookDetailView/>
+                </DataTemplate>
+
+                <DataTemplate DataType="{x:Type viewmodels:CategoryListViewModel}">
+                    <views:CategoryListView/>
+                </DataTemplate>
+
+                <DataTemplate DataType="{x:Type viewmodels:AuthorListViewModel}">
+                    <views:AuthorListView/>
+                </DataTemplate>
+
+                <DataTemplate DataType="{x:Type viewmodels:MyCommentsViewModel}">
+                    <views:MyCommentsView/>
+                </DataTemplate>
+            </ContentControl.Resources>
+        </ContentControl>
+    </DockPanel>
+</Window>

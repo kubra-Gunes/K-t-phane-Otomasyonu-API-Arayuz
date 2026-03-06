@@ -1,0 +1,31 @@
+﻿<Window x:Class="KutuphaneOtomasyonu.WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KutuphaneOtomasyonu.WPF"
+        mc:Ignorable="d"
+        Title="Kütüphane Otomasyonu" Height="450" Width="800">
+    <Grid>
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock Text="Kütüphane Otomasyon Sistemine Hoş Geldiniz!"
+                       FontSize="24"
+                       FontWeight="Bold"
+                       Margin="0,0,0,50"
+                       HorizontalAlignment="Center"/>
+
+            <Button Content="Kullanıcı Girişi"
+                    Width="200"
+                    Height="40"
+                    Margin="0,10"
+                    FontSize="16"
+                    Click="UserLogin_Click"/>
+            <Button Content="Yönetici Girişi"
+                    Width="200"
+                    Height="40"
+                    Margin="0,10"
+                    FontSize="16"
+                    Click="AdminLogin_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

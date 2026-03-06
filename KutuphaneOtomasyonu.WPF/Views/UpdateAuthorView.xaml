@@ -1,0 +1,112 @@
+﻿<UserControl x:Class="KutuphaneOtomasyonu.WPF.Views.UpdateAuthorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewmodels="clr-namespace:KutuphaneOtomasyonu.WPF.ViewModels"
+             xmlns:local="clr-namespace:KutuphaneOtomasyonu.WPF.Converters"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <local:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+        <local:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </UserControl.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Text="Yazar Güncelle"
+                   Style="{StaticResource TitleText}"
+                   Margin="0,0,0,20"
+                   Grid.Row="0"/>
+
+        <Border Grid.Row="1" Style="{StaticResource CardStyle}" Margin="0,0,0,20" Padding="20">
+            <StackPanel>
+                <TextBlock Text="Mevcut Yazarı Seçin" FontWeight="SemiBold"/>
+                <ComboBox ItemsSource="{Binding Authors}"
+                          SelectedItem="{Binding SelectedAuthor}"
+                          DisplayMemberPath="TamAd"
+                          Padding="8"
+                          Margin="0,5,0,15"/>
+
+                <StackPanel Margin="0,0,0,15">
+                    <TextBlock Text="Yazar Adı" FontWeight="SemiBold"/>
+                    <TextBox Text="{Binding UpdatedAuthor.Ad, UpdateSourceTrigger=PropertyChanged}" Padding="8"/>
+                </StackPanel>
+
+                <StackPanel Margin="0,0,0,15">
+                    <TextBlock Text="Yazar Soyadı" FontWeight="SemiBold"/>
+                    <TextBox Text="{Binding UpdatedAuthor.Soyad, UpdateSourceTrigger=PropertyChanged}" Padding="8"/>
+                </StackPanel>
+
+                <StackPanel Margin="0,0,0,15">
+                    <TextBlock Text="Biyografi" FontWeight="SemiBold"/>
+                    <TextBox Text="{Binding UpdatedAuthor.Biyografi, UpdateSourceTrigger=PropertyChanged}"
+                             TextWrapping="Wrap"
+                             AcceptsReturn="True"
+                             MinHeight="60"
+                             VerticalScrollBarVisibility="Auto"
+                             Padding="8"/>
+                </StackPanel>
+
+                <!-- BUTONLAR İÇİN YENİ STACKPANEL -->
+                <StackPanel Margin="0,0,0,0" HorizontalAlignment="Center">
+                    <Button Content="Yazarı Güncelle"
+                            Command="{Binding UpdateAuthorCommand}"
+                            Style="{StaticResource PrimaryButton}"
+                            Margin="0,0,0,10"
+                            Width="220" 
+                            Background="#2E8B57" 
+                            Foreground="White" 
+                            Height="40"
+                            FontSize="14"/>
+
+                    <Button Content="Yazarı Sil" 
+                            Command="{Binding DeleteAuthorCommand}" 
+                            Background="#DC3545" 
+                            Foreground="White" 
+                            FontWeight="Bold"
+                            Padding="10,5"
+                            BorderBrush="#DC3545" 
+                            BorderThickness="1"
+                            Cursor="Hand" 
+                            Width="220"  
+                            Height="40"
+                            FontSize="14"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <TextBlock Grid.Row="2" 
+                   Text="{Binding ErrorMessage}"
+                   Foreground="Red"
+                   Margin="0,10,0,10"
+                   Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
+
+        <TextBlock Grid.Row="3"
+                   Text="{Binding SuccessMessage}"
+                   Foreground="Green"
+                   Margin="0,0,0,10"
+                   Visibility="{Binding SuccessMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
+
+        <ProgressBar Grid.Row="4"
+                     IsIndeterminate="True"
+                     Height="10"
+                     VerticalAlignment="Top"
+                     Margin="0,10,0,0"
+                     Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+    </Grid>
+</UserControl>

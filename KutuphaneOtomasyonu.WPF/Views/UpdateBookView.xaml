@@ -1,0 +1,119 @@
+﻿<UserControl x:Class="KutuphaneOtomasyonu.WPF.Views.UpdateBookView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:viewmodels="clr-namespace:KutuphaneOtomasyonu.WPF.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="650" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <viewmodels:UpdateBookViewModel />
+    </UserControl.DataContext>
+
+    <Grid Background="#F4F6F8">
+        <Border Background="White" Padding="30" CornerRadius="15" BorderBrush="#D3D3D3" BorderThickness="1"
+                HorizontalAlignment="Center" VerticalAlignment="Center" Width="550">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <TextBlock Text="Kitap Güncelle" FontSize="26" FontWeight="Bold" Foreground="#333" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+
+                    <StackPanel Margin="0,0,0,15">
+                        <TextBlock Text="Güncellenecek Kitabı Seçin" FontWeight="SemiBold"/>
+                        <ComboBox ItemsSource="{Binding Books}"
+                                  SelectedItem="{Binding SelectedBook, Mode=TwoWay}"
+                                  DisplayMemberPath="KitapAdi"
+                                  Height="30">
+                        </ComboBox>
+                    </StackPanel>
+
+                    <StackPanel Margin="0,0,0,10">
+                        <TextBlock Text="Kitap Adı" FontWeight="SemiBold"/>
+                        <TextBox Text="{Binding UpdatedBook.KitapAdi, UpdateSourceTrigger=PropertyChanged}" 
+                                 Padding="8" Height="30"/>
+                    </StackPanel>
+
+                    <StackPanel Margin="0,0,0,10">
+                        <TextBlock Text="Yazar" FontWeight="SemiBold"/>
+                        <ComboBox ItemsSource="{Binding Authors}"
+                                  SelectedValue="{Binding UpdatedBook.YazarId, Mode=TwoWay}"
+                                  SelectedValuePath="YazarId"
+                                  DisplayMemberPath="TamAd"
+                                  Height="30"/>
+                    </StackPanel>
+
+                    <StackPanel Margin="0,0,0,10">
+                        <TextBlock Text="Kategori" FontWeight="SemiBold"/>
+                        <ComboBox ItemsSource="{Binding Categories}"
+                                  SelectedValue="{Binding UpdatedBook.KategoriId, Mode=TwoWay}"
+                                  SelectedValuePath="KategoriId"
+                                  DisplayMemberPath="KategoriAdi"
+                                  Height="30"/>
+                    </StackPanel>
+
+                    <StackPanel Margin="0,0,0,10">
+                        <TextBlock Text="Stok Adedi" FontWeight="SemiBold"/>
+                        <TextBox Text="{Binding UpdatedBook.StokAdedi, UpdateSourceTrigger=PropertyChanged}" 
+                                 Padding="8" Height="30" InputScope="Number"
+                                 PreviewTextInput="NumberValidationTextBox"/>
+                    </StackPanel>
+
+                    <StackPanel Margin="0,0,0,10">
+                        <TextBlock Text="Mevcut Adet" FontWeight="SemiBold"/>
+                        <TextBox Text="{Binding UpdatedBook.MevcutAdet, UpdateSourceTrigger=PropertyChanged}" 
+                                 Padding="8" Height="30" InputScope="Number"
+                                 PreviewTextInput="NumberValidationTextBox"/>
+                    </StackPanel>
+
+                    <StackPanel Margin="0,0,0,10">
+                        <TextBlock Text="Yayın Yılı" FontWeight="SemiBold"/>
+                        <TextBox Text="{Binding UpdatedBook.YayinYili, UpdateSourceTrigger=PropertyChanged}" 
+                                 Padding="8" Height="30" InputScope="Number"
+                                 PreviewTextInput="NumberValidationTextBox"/>
+                    </StackPanel>
+
+                    <StackPanel Margin="0,0,0,10">
+                        <TextBlock Text="Sayfa Sayısı" FontWeight="SemiBold"/>
+                        <TextBox Text="{Binding UpdatedBook.SayfaSayisi, UpdateSourceTrigger=PropertyChanged}" 
+                                 Padding="8" Height="30" InputScope="Number"
+                                 PreviewTextInput="NumberValidationTextBox"/>
+                    </StackPanel>
+
+                    <StackPanel Margin="0,0,0,15">
+                        <TextBlock Text="Açıklama" FontWeight="SemiBold"/>
+                        <TextBox Text="{Binding UpdatedBook.Aciklama, UpdateSourceTrigger=PropertyChanged}" 
+                                 Padding="8" Height="100" TextWrapping="Wrap" AcceptsReturn="True"
+                                 VerticalScrollBarVisibility="Auto"/>
+                    </StackPanel>
+                    <Button Content="Kitabı Güncelle"
+                            Command="{Binding UpdateBookCommand}"
+                            Style="{StaticResource PrimaryButton}"
+                            Margin="0,0,0,10"
+                            Width="220" 
+                            Background="#2E8B57" 
+                            Foreground="White" 
+                            Height="40"
+                            FontSize="14"/>
+
+                    <Button Content="Kitabı Sil" 
+                            Command="{Binding DeleteBookCommand}" 
+                            Background="#DC3545" 
+                            Foreground="White" 
+                            FontWeight="Bold"
+                            Padding="10,5"
+                            BorderBrush="#DC3545" 
+                            BorderThickness="1"
+                            Cursor="Hand" 
+                            Width="220"  
+                            Height="40"
+                            FontSize="14"/>
+
+                    <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" HorizontalAlignment="Center" FontSize="12" Margin="0,5"/>
+                    <TextBlock Text="{Binding SuccessMessage}" Foreground="Green" HorizontalAlignment="Center" FontSize="12" Margin="0,5"/>
+
+                    <ProgressBar IsIndeterminate="{Binding IsLoading}" Height="8" Margin="0,10,0,0"
+                                 Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+    </Grid>
+</UserControl>

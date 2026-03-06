@@ -1,0 +1,183 @@
+﻿<UserControl x:Class="KutuphaneOtomasyonu.WPF.Views.BookListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewmodels="clr-namespace:KutuphaneOtomasyonu.WPF.ViewModels"
+             xmlns:converters="clr-namespace:KutuphaneOtomasyonu.WPF.Converters" mc:Ignorable="d"
+             d:DesignHeight="600" d:DesignWidth="1000">
+
+
+    <UserControl.Resources>
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <FontFamily x:Key="PrimaryFont">Segoe UI, sans-serif</FontFamily>
+        <SolidColorBrush x:Key="PrimaryColor" Color="#007BFF"/>
+        <SolidColorBrush x:Key="TextColor" Color="#343A40"/>
+        <SolidColorBrush x:Key="LightTextColor" Color="#6C757D"/>
+        <SolidColorBrush x:Key="BorderColor" Color="#E0E0E0"/>
+        <SolidColorBrush x:Key="AlternateRowColor" Color="#F8F9FA"/>
+        <Style x:Key="PageHeader" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="28"/>
+            <Setter Property="FontWeight" Value="ExtraBold"/>
+            <Setter Property="Foreground" Value="{StaticResource TextColor}"/>
+            <Setter Property="Margin" Value="0,20,0,20"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+
+        <Style TargetType="GridViewColumnHeader">
+            <Setter Property="Background" Value="{StaticResource PrimaryColor}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="BorderBrush" Value="{StaticResource PrimaryColor}"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        </Style>
+
+        <Style TargetType="ListViewItem">
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderColor}"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="Foreground" Value="{StaticResource TextColor}"/>
+            <Style.Triggers>
+                <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                    <Setter Property="Background" Value="{StaticResource AlternateRowColor}"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#E9F5FF"/>
+                    <Setter Property="Foreground" Value="{StaticResource PrimaryColor}"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#CCE0FF"/>
+                    <Setter Property="Foreground" Value="{StaticResource TextColor}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="ErrorMessageStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#DC3545"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,10,0,10"/>
+        </Style>
+
+        <Style TargetType="ProgressBar">
+            <Setter Property="Height" Value="10"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="IsIndeterminate" Value="True"/>
+            <Setter Property="Foreground" Value="{StaticResource PrimaryColor}"/>
+            <Setter Property="Background" Value="#E9ECEF"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Visibility" Value="Collapsed"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsLoading}" Value="True">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Margin="0,0,-2046,-712">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="📚 Kitap Listesi" Style="{StaticResource PageHeader}"/>
+
+        <TextBox Grid.Row="1"
+         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+         Margin="0,0,0,10"
+         Padding="5"
+         FontSize="14"
+         VerticalContentAlignment="Center"
+         BorderBrush="{StaticResource BorderColor}"
+         BorderThickness="1"
+         Background="White">
+            <TextBox.Template>
+                <ControlTemplate TargetType="TextBox">
+                    <Border Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="3">
+                        <Grid>
+                            <ScrollViewer x:Name="PART_ContentHost" />
+                            <TextBlock IsHitTestVisible="False"
+                               Text="Kitap Ara..."
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               Margin="5,0,0,0"
+                               Foreground="{StaticResource LightTextColor}"
+                               Visibility="{Binding Text.IsEmpty, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </TextBox.Template>
+        </TextBox>
+        <TextBox Grid.Row="1"
+         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+         Margin="0,0,0,10"
+         Padding="5"
+         FontSize="14"
+         VerticalContentAlignment="Center"
+         BorderBrush="{StaticResource BorderColor}"
+         BorderThickness="1"
+         Background="White">
+            <TextBox.Template>
+                <ControlTemplate TargetType="TextBox">
+                    <Border Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="3">
+                        <Grid>
+                            <ScrollViewer x:Name="PART_ContentHost" />
+                            <TextBlock IsHitTestVisible="False"
+                               Text="Kitap Ara..."
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               Margin="5,0,0,0"
+                               Foreground="{StaticResource LightTextColor}"
+                               Visibility="{Binding Text.IsEmpty, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </TextBox.Template>
+        </TextBox>
+        
+
+        <ListView Grid.Row="2" ItemsSource="{Binding Books}" Margin="20,0,20,20"
+                  SelectedItem="{Binding SelectedBook, Mode=TwoWay}"
+                  BorderBrush="{StaticResource BorderColor}" BorderThickness="1"
+                  Background="White"
+                  ScrollViewer.CanContentScroll="True"
+                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                  AlternationCount="2">
+            <ListView.Effect>
+                <DropShadowEffect ShadowDepth="2" Direction="270" Color="#CCCCCC" Opacity="0.4" BlurRadius="5"/>
+            </ListView.Effect>
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Kitap Adı" DisplayMemberBinding="{Binding KitapAdi}" Width="250"/>
+                    <GridViewColumn Header="Yazar" DisplayMemberBinding="{Binding YazarAdSoyad}" Width="150"/>
+                    <GridViewColumn Header="Kategori" DisplayMemberBinding="{Binding KategoriAdi}" Width="150"/>
+
+                    <GridViewColumn Header="Ort. Puan" DisplayMemberBinding="{Binding OrtalamaPuan, StringFormat='F1'}" Width="80"/>
+                    <GridViewColumn Header="Yorumlar" DisplayMemberBinding="{Binding YorumSayisi}" Width="80"/>
+                    <GridViewColumn Header="Mevcut Adet" DisplayMemberBinding="{Binding MevcutAdet}" Width="100"/>
+                    <GridViewColumn Header="Stok Adedi" DisplayMemberBinding="{Binding StokAdedi}" Width="100"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <StackPanel Grid.Row="2" Orientation="Vertical" HorizontalAlignment="Stretch" Margin="20,0,20,10">
+            <TextBlock Text="{Binding ErrorMessage}" Style="{StaticResource ErrorMessageStyle}"/>
+            <ProgressBar IsIndeterminate="{Binding IsLoading}" HorizontalAlignment="Stretch"
+                         Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

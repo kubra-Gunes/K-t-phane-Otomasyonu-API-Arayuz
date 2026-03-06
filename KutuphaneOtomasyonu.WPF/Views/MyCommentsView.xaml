@@ -1,0 +1,181 @@
+﻿<UserControl x:Class="KutuphaneOtomasyonu.WPF.Views.MyCommentsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:KutuphaneOtomasyonu.WPF.Views"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <Border Background="#F4F6F8" Padding="10">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Yorumlarım"
+                       FontSize="26"
+                       FontWeight="Bold"
+                       Foreground="#333"
+                       HorizontalAlignment="Center"
+                       Margin="10"/>
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- DataGrid with Border for CornerRadius effect -->
+                <Border Grid.Column="0" Margin="10" CornerRadius="10" Background="White">
+                    <DataGrid ItemsSource="{Binding MyComments}"
+                              SelectedItem="{Binding SelectedComment}"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True"
+                              HeadersVisibility="Column"
+                              RowBackground="White"
+                              AlternatingRowBackground="#f0f0f0"
+                              GridLinesVisibility="None"
+                              BorderThickness="0">
+                        <DataGrid.Resources>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Background" Value="#E8EEF1"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                                <Setter Property="Foreground" Value="#333"/>
+                                <Setter Property="Padding" Value="8"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                            </Style>
+                        </DataGrid.Resources>
+
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Setter Property="Background" Value="White"/>
+                                <Setter Property="Foreground" Value="Black"/>
+                                <Setter Property="Cursor" Value="Hand"/>
+                                <Setter Property="Margin" Value="2"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#D7EBFF"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.RowStyle>
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Kitap Adı" Binding="{Binding KitapAd}" Width="*"/>
+                            <DataGridTextColumn Header="Yorum Metni" Binding="{Binding YorumMetni}" Width="2*"/>
+                            <DataGridTextColumn Header="Puan" Binding="{Binding Puan}" Width="Auto"/>
+                            <DataGridTextColumn Header="Tarih" Binding="{Binding YorumTarihi, StringFormat='dd.MM.yyyy'}" Width="Auto"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Border>
+
+                <!-- Butonlar -->
+                <StackPanel Grid.Column="1" Margin="10" VerticalAlignment="Top">
+                    <Button Content="✏️ Yorumu Düzenle"
+                            Command="{Binding EditCommentCommand}"
+                            CommandParameter="{Binding SelectedComment}"
+                            Margin="0,0,0,10"
+                            Background="#4A90E2"
+                            Foreground="White"
+                            FontWeight="Bold"
+                            BorderThickness="0"
+                            Height="40"
+                            Padding="10"
+                            Cursor="Hand"/>
+
+                    <Button Content="🗑 Sil"
+                            Command="{Binding DeleteCommentCommand}"
+                            Background="#E74C3C"
+                            Foreground="White"
+                            FontWeight="Bold"
+                            BorderThickness="0"
+                            Height="40"
+                            Padding="10"
+                            Cursor="Hand"/>
+                </StackPanel>
+
+                <!-- Edit Popup -->
+                <Grid x:Name="EditCommentPopupGrid"
+                      Background="#99000000"
+                      Visibility="{Binding IsEditPopupVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                    <Border Background="White"
+        BorderBrush="#CCCCCC"
+        BorderThickness="1"
+        Padding="20"
+        CornerRadius="10"
+        Width="400"
+        Height="230"
+        VerticalAlignment="Center"
+        HorizontalAlignment="Center">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="10"
+                          ShadowDepth="4"
+                          Opacity="0.3"
+                          Color="Black"/>
+                        </Border.Effect>
+                        <StackPanel>
+                            <TextBlock Text="Yorumu Düzenle"
+                                       FontWeight="Bold"
+                                       FontSize="18"
+                                       Margin="0,0,0,10"
+                                       HorizontalAlignment="Center"/>
+                            <TextBox x:Name="EditedCommentTextBox"
+                                     Text="{Binding SelectedComment.YorumMetni, UpdateSourceTrigger=PropertyChanged}"
+                                     TextWrapping="Wrap"
+                                     AcceptsReturn="True"
+                                     Height="80"
+                                     Margin="0,0,0,10"
+                                     BorderBrush="#CCC"/>
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Button Content="💾 Kaydet"
+                                        Command="{Binding SaveEditCommand}"
+                                        Margin="0,0,10,0"
+                                        Background="#27AE60"
+                                        Foreground="White"
+                                        BorderThickness="0"
+                                        Width="100"
+                                        Height="30"
+                                        Cursor="Hand"/>
+
+                                <Button Content="❌ İptal"
+                                        Command="{Binding CancelEditCommand}"
+                                        Background="#C0392B"
+                                        Foreground="White"
+                                        BorderThickness="0"
+                                        Width="100"
+                                        Height="30"
+                                        Cursor="Hand"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Grid>
+
+            <!-- Error Message -->
+            <TextBlock Grid.Row="1"
+                       Text="{Binding ErrorMessage}"
+                       Foreground="Red"
+                       FontWeight="SemiBold"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Bottom"
+                       Margin="10"/>
+
+            <!-- ProgressBar with Border -->
+            <Border Grid.Row="1"
+                    Margin="10"
+                    VerticalAlignment="Bottom"
+                    Height="6"
+                    Background="#E0E0E0"
+                    CornerRadius="3">
+                <ProgressBar IsIndeterminate="True"
+                             Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"
+                             Foreground="#4A90E2"
+                             Background="Transparent"/>
+            </Border>
+        </Grid>
+    </Border>
+</UserControl>

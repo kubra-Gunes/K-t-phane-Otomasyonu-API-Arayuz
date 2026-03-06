@@ -1,0 +1,57 @@
+﻿<UserControl x:Class="KutuphaneOtomasyonu.WPF.Views.BorrowBookView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Kitap Ödünç Al" Style="{StaticResource HeaderTextBlock}" Grid.Row="0"/>
+
+        <StackPanel Grid.Row="1" Margin="0,15,0,10">
+            <TextBlock Text="Kullanıcı e-posta:" FontWeight="SemiBold" FontSize="15" Margin="0,0,0,5"/>
+            <TextBox Text="{Binding KullaniciEmail, UpdateSourceTrigger=PropertyChanged}" 
+                     Width="300" Height="40" FontSize="15" Padding="10"
+                     HorizontalAlignment="Left"
+                     ToolTip="Ödünç alacak kullanıcının e-postasını girin."/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Margin="0,10,0,10">
+            <TextBlock Text="Ödünç Alınacak Kitabı Seçin:" FontWeight="SemiBold" FontSize="15" Margin="0,0,0,5"/>
+            <ComboBox ItemsSource="{Binding AvailableBooks}"
+                      SelectedItem="{Binding SelectedBook}"
+                      DisplayMemberPath="KitapAdi"
+                      Width="300" Height="50" FontSize="15" Padding="10"
+                      HorizontalAlignment="Left"
+                      ToolTip="Stokta olan kitaplardan birini seçin."/>
+        </StackPanel>
+
+        <Button Content="Ödünç Al"
+                Grid.Row="3"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Style="{StaticResource PrimaryButton}"
+                Command="{Binding BorrowBookCommand}"
+                Margin="0,20,0,0"
+                Width="200"
+                Height="55"
+                FontSize="17"
+                Background="#2E8B57" Foreground="White"
+                Padding="20,12"/>
+
+        <TextBlock Text="{Binding StatusMessage}" 
+                   Grid.Row="4" 
+                   Margin="0,20,0,0" 
+                   Foreground="Red" 
+                   FontStyle="Italic" 
+                   FontSize="14"/>
+    </Grid>
+</UserControl>
